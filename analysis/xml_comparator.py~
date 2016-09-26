@@ -1,0 +1,504 @@
+#!/usr/local/bin/python3.5
+
+from lxml import etree
+
+class XmlComparator:
+
+    added_files_new = []
+    added_files_missing = []
+
+    deleted_files_new = []
+    deleted_files_missing = []
+
+    modified_files_new = []
+    modified_files_missing = []
+        
+    file_system_removed =[]
+    file_system_change =[]
+
+    reg_added_path_new = {}
+    reg_deleted_path_new = {}
+    reg_added_path_missing = {}
+    reg_deleted_path_missing = {}
+
+    reg_added_keys_new = {}
+    reg_deleted_keys_new = {}
+    reg_modified_keys_new = {}
+
+    reg_added_keys_missing = {}
+    reg_deleted_keys_missing = {}
+    reg_modified_keys_missing = {}
+
+    reg_added_keys_changing = {}
+    reg_deleted_keys_changing = {}
+    reg_modified_keys_changing = {}
+
+    
+    def __init__(self, path_ref, path_sample):
+
+        #Node XML
+        self.xml_ref_path = path_ref
+        self.xml_sample_path = path_sample
+        self.ref_tree = etree.parse(self.xml_ref_path)
+        self.sample_tree = etree.parse(self.xml_sample_path)
+        
+
+        added_files_new = []
+        added_files_missing = []
+
+        deleted_files_new = []
+        deleted_files_missing = []
+        
+        modified_files_new = []
+        modified_files_missing = []
+        
+        file_system_removed =[]
+        file_system_change =[]
+
+
+    def compare_xml(self):
+        
+        #self.compare_file_system_added_file()
+        #self.compare_file_system_deleted_file()
+        #self.compare_file_system_modified_file()
+
+        self.compare_registry_path()
+        
+
+    def compare_file_system_added_file(self):
+
+        # File system comparaison
+        if self.ref_tree.xpath("/analysis/files_system/added_file/file") != self.sample_tree.xpath("/analysis/files_system/added_file/file"):
+
+            # On parcourt la référence pour trouver les fichier ajouté dans la référence et non ajouté dans l'echantillon analysé
+            for i in self.ref_tree.xpath("/analysis/files_system/added_file/file"):
+                i_children = i.getchildren()
+                
+                present = False
+
+                for j in self.sample_tree.xpath("/analysis/files_system/added_file/file"):
+                    j_children = j.getchildren()
+                    #print("J: "+j.getchildren()[-2].text)
+
+                    if (i_children[-1].text == j_children[-1].text and i_children[-2].text == j_children[-2].text):                        
+                        present = True
+                        break
+
+                if present == False:
+                    self.added_files_missing.append(j)
+                    print("I: "+i.getchildren()[-2].text)
+                    print("absent")
+
+
+
+            # On parcourt la référence pour trouver les fichier ajouté dans  l'echantillon analysé et non ajouté dans la référence
+            for i in self.sample_tree.xpath("/analysis/files_system/added_file/file"):
+                i_children = i.getchildren()
+                
+                present = False
+
+                for j in self.ref_tree.xpath("/analysis/files_system/added_file/file"):
+                    j_children = j.getchildren()
+                    #print("J: "+j.getchildren()[-2].text)
+
+                    if (i_children[-1].text == j_children[-1].text and i_children[-2].text == j_children[-2].text):                        
+                        present = True
+                        break
+
+                if present == False:
+                    self.added_files_new.append(j)
+                    print("I: "+i.getchildren()[-2].text)
+                    print("I: "+i.getchildren()[-1].text)
+                    print("new")
+
+                    
+    def compare_file_system_deleted_file(self):
+
+        # File system comparaison
+        if self.ref_tree.xpath("/analysis/files_system/deleted_file/file") != self.sample_tree.xpath("/analysis/files_system/deleted_file/file"):
+
+            # On parcourt la référence pour trouver les fichier supprimé dans la référence et non supprimé dans l'echantillon analysé
+            for i in self.ref_tree.xpath("/analysis/files_system/deleted_file/file"):
+                i_children = i.getchildren()
+                
+                present = False
+
+                for j in self.sample_tree.xpath("/analysis/files_system/deleted_file/file"):
+                    j_children = j.getchildren()
+                    #print("J: "+j.getchildren()[-2].text)
+
+                    if (i_children[-1].text == j_children[-1].text and i_children[-2].text == j_children[-2].text):                        
+                        present = True
+                        break
+
+                if present == False:
+                    self.deleted_files_missing.append(j)
+                    print("I: "+i.getchildren()[-2].text)
+                    print("absent")
+
+
+
+            # On parcourt la référence pour trouver les fichier supprimé dans  l'echantillon analysé et non supprimé dans la référence
+            for i in self.sample_tree.xpath("/analysis/files_system/deleted_file/file"):
+                i_children = i.getchildren()
+                
+                present = False
+
+                for j in self.ref_tree.xpath("/analysis/files_system/deleted_file/file"):
+                    j_children = j.getchildren()
+                    #print("J: "+j.getchildren()[-2].text)
+
+                    if (i_children[-1].text == j_children[-1].text and i_children[-2].text == j_children[-2].text):                        
+                        present = True
+                        break
+
+                if present == False:
+                    self.deleted_files_new.append(j)
+                    print("I: "+i.getchildren()[-2].text)
+                    print("I: "+i.getchildren()[-1].text)
+                    print("new")
+
+                    
+    def compare_file_system_modified_file(self):
+
+        # File system comparaison
+        if self.ref_tree.xpath("/analysis/files_system/modified_file/file") != self.sample_tree.xpath("/analysis/files_system/modified_file/file"):
+
+            # On parcourt la référence pour trouver les fichier modifié dans la référence et non modifié dans l'echantillon analysé
+            for i in self.ref_tree.xpath("/analysis/files_system/modified_file/file"):
+                i_children = i.getchildren()
+                
+                present = False
+
+                for j in self.sample_tree.xpath("/analysis/files_system/modified_file/file"):
+                    j_children = j.getchildren()
+                    #print("J: "+j.getchildren()[-2].text)
+
+                    if (i_children[-1].text == j_children[-1].text and i_children[-2].text == j_children[-2].text):                        
+                        present = True
+                        break
+
+                if present == False:
+                    self.modified_files_missing.append(j)
+                    print("I: "+i.getchildren()[-2].text)
+                    print("absent")
+
+
+
+            # On parcourt la référence pour trouver les fichier modifié dans l'echantillon analysé et non modifié dans la référence
+            for i in self.sample_tree.xpath("/analysis/files_system/modified_file/file"):
+                i_children = i.getchildren()
+                
+                present = False
+
+                for j in self.ref_tree.xpath("/analysis/files_system/modified_file/file"):
+                    j_children = j.getchildren()
+                    #print("J: "+j.getchildren()[-2].text)
+
+                    if (i_children[-1].text == j_children[-1].text and i_children[-2].text == j_children[-2].text):                        
+                        present = True
+                        break
+
+                if present == False:
+                    self.modified_files_new.append(j)
+                    print("I: "+i.getchildren()[-2].text)
+                    print("I: "+i.getchildren()[-1].text)
+                    print("new")
+
+                
+    def compare_registry_path(self):
+
+        ref_added_path = {}
+        ref_deleted_path = {}
+        ref_added_keys = {}
+        ref_deleted_keys = {}
+        ref_modified_keys = {}
+
+        sample_added_path = {}
+        sample_deleted_path = {}
+        sample_added_keys = {}
+        sample_deleted_keys = {}
+        sample_modified_keys = {}
+
+        ##################################################################
+        # recupération des données nécessaire à la comparaison ###########
+        ##################################################################
+
+        for registry_file in self.ref_tree.xpath("/analysis/registry_modification/registry_file"):            
+            file_path = ""
+
+            for children in registry_file.getchildren():
+
+                #Path du fichier registre
+                if children.tag == "file_path":
+                    file_path = children.text
+
+                # Modification des paths
+                if children.tag == "path_modification":
+                    for paths in children.getchildren():
+                        if paths.tag == "added_paths":
+                            ref_added_path[file_path] = []
+                            ref_added_path[file_path] += paths.getchildren()
+
+                        elif paths.tag == "deleted_paths":
+                            ref_deleted_path[file_path] = []
+                            ref_deleted_path[file_path] += paths.getchildren()
+
+                # Modification des clées
+                if children.tag == "key_modification":
+                    for keys in children.getchildren():
+                        if keys.tag == "added_keys":
+                            ref_added_keys[file_path] = []
+                            ref_added_keys[file_path] += keys.getchildren()
+
+                        elif keys.tag == "deleted_keys":
+                            ref_deleted_keys[file_path] = []
+                            ref_deleted_keys[file_path] += keys.getchildren()
+
+                        elif keys.tag == "modified_keys":
+                            ref_modified_keys[file_path] = []
+                            ref_modified_keys[file_path] += keys.getchildren()
+
+
+        for registry_file in self.sample_tree.xpath("/analysis/registry_modification/registry_file"):
+            
+            file_path = ""
+
+            for children in registry_file.getchildren():
+
+                #Path du fichier registre
+                if children.tag == "file_path":
+                    file_path = children.text
+
+                # Modification des paths
+                if children.tag == "path_modification":
+                    for paths in children.getchildren():
+                        if paths.tag == "added_paths":
+                            sample_added_path[file_path] = []
+                            sample_added_path[file_path] += paths.getchildren()
+
+                        elif paths.tag == "deleted_paths":
+                            sample_deleted_path[file_path] = []
+                            sample_deleted_path[file_path] += paths.getchildren()
+
+                # Modification des clées
+                if children.tag == "key_modification":
+                    for keys in children.getchildren():
+                        if keys.tag == "added_keys":
+                            sample_added_keys[file_path] = []
+                            sample_added_keys[file_path] += keys.getchildren()
+
+                        elif keys.tag == "deleted_keys":
+                            sample_deleted_keys[file_path] = []
+                            sample_deleted_keys[file_path] += keys.getchildren()
+
+                        elif keys.tag == "modified_keys":
+                            sample_modified_keys[file_path] = []
+                            sample_modified_keys[file_path] += keys.getchildren()
+
+                
+                            
+        ##################################################################
+        # Comparasion reference/resultat des données receuillies - PATH###
+        ##################################################################
+        
+        # Comparaison pour trouver les paths ajouté manquant dans l'extrait analysé
+        for registry_path in ref_added_path.keys():
+            self.reg_added_path_missing[registry_path] = []
+            for ref_path in ref_added_path[registry_path]:                
+                present = False
+                
+                if registry_path in sample_added_path:
+                    for sample_path in sample_added_path[registry_path]:
+                        if sample_path.text == ref_path.text:
+                            present = True
+
+                    if present == False:
+                        self.reg_added_path_missing[registry_path].append(ref_path)
+
+                else:
+                    self.reg_added_path_missing[registry_path].append(ref_path)
+
+
+        # Comparaison pour trouver les paths ajouté en plus dans l'extrait analysé
+        for registry_path in sample_added_path.keys():
+            self.reg_added_path_new[registry_path] = []
+            
+            for sample_path in sample_added_path[registry_path]:                
+                present = False
+                
+                if registry_path in ref_added_path:
+                    for ref_path in ref_added_path[registry_path]:
+                        if ref_path.text == sample_path.text:
+                            present = True
+
+                    if present == False:
+                        self.reg_added_path_new[registry_path].append(sample_path)
+
+                else:
+                    self.reg_added_path_new[registry_path].append(sample_path)
+
+
+        # Comparaison pour trouver les paths supprimé manquant dans l'extrait analysé
+        for registry_path in ref_deleted_path.keys():
+            self.reg_deleted_path_missing[registry_path] = []
+            
+            for ref_path in ref_deleted_path[registry_path]:                
+                present = False
+                
+                if registry_path in sample_deleted_path:
+                    for sample_path in sample_deleted_path[registry_path]:
+                        if sample_path.text == ref_path.text:
+                            present = True
+
+                    if present == False:
+                        self.reg_deleted_path_missing[registry_path].append(ref_path)
+
+                else:
+                    self.reg_deleted_path_missing[registry_path].append(ref_path)
+                    
+
+        # Comparaison pour trouver les paths supprimé en plus dans l'extrait analysé
+        for registry_path in sample_deleted_path.keys():
+            self.reg_deleted_path_new[registry_path] = []
+            
+            for sample_path in sample_deleted_path[registry_path]:                
+                present = False
+                
+                if registry_path in ref_deleted_path:
+                    for ref_path in ref_deleted_path[registry_path]:
+                        if ref_path.text == sample_path.text:
+                            present = True
+
+                    if present == False:
+                        self.reg_deleted_path_new[registry_path].append(sample_path)
+
+                else:
+                    self.reg_deleted_path_new[registry_path].append(sample_path)
+
+
+
+
+
+
+
+                    
+        ##################################################################
+        # Comparasion reference/resultat des données receuillies - KEY ###
+        ##################################################################
+        
+        # Comparaison pour trouver les clé de registres ajoutées manquant dans l'extrait analysé
+        for registry_path in ref_added_path.keys():
+
+            self.reg_added_keys_missing[registry_path] = []
+            self.reg_added_keys_changing[registry_path] = []
+            
+            for ref_key in ref_added_keys[registry_path]:
+                present = False
+                modified = False
+
+                if registry_path in sample_added_keys:
+                    for sample_key in sample_added_keys[registry_path]:
+
+                        if (sample_key.find("key_path").text == ref_key.find("key_path").text and sample_key.find("name").text == ref_key.find("name").text and sample_key.find("type").text == ref_key.find("type").text):
+                            present = True
+
+                            if (sample_key.find("value").text != ref_key.find("value").text):
+                                modified = True
+
+                    if modified == True:
+                        self.reg_added_keys_changing[registry_path].append(ref_key)
+                        print("changing: " + ref_key.find("name").text)
+                    elif present == False:
+                        self.reg_added_keys_missing[registry_path].append(ref_key)
+
+                else:
+                    self.reg_added_keys_missing[registry_path].append(ref_key)
+
+
+
+        # Comparaison pour trouver les clé de registres ajoutées en plus dans l'extrait analysé
+        for registry_path in sample_added_path.keys():
+            self.reg_added_keys_new[registry_path] = []
+            
+            for sample_key in sample_added_keys[registry_path]:                
+                present = False
+
+                if registry_path in ref_added_keys:
+                    for ref_key in ref_added_keys[registry_path]:
+
+                        if (ref_key.find("key_path").text == sample_key.find("key_path").text and ref_key.find("name").text == sample_key.find("name").text and ref_key.find("type").text == sample_key.find("type").text):
+                            present = True
+
+                    if present == False:
+                        self.reg_added_keys_new[registry_path].append(sample_key)
+                else:
+                    self.reg_added_keys_new[registry_path].append(sample_key)
+
+
+
+
+
+        # Comparaison pour trouver les clé de registres supprimées manquantes dans l'extrait analysé
+        for registry_path in ref_deleted_path.keys():
+
+            self.reg_deleted_keys_missing[registry_path] = []
+            self.reg_deleted_keys_changing[registry_path] = []
+            
+            for ref_key in ref_deleted_keys[registry_path]:
+                present = False
+                modified = False
+
+                if registry_path in sample_deleted_keys:
+                    for sample_key in sample_deleted_keys[registry_path]:
+
+                        if (sample_key.find("key_path").text == ref_key.find("key_path").text and sample_key.find("name").text == ref_key.find("name").text and sample_key.find("type").text == ref_key.find("type").text):
+                            present = True
+
+                            if (sample_key.find("value").text != ref_key.find("value").text):
+                                modified = True
+
+                    if modified == True:
+                        self.reg_deleted_keys_changing[registry_path].append(ref_key)
+                        print("del changing: " + ref_key.find("name").text)
+                    elif present == False:
+                        self.reg_deleted_keys_missing[registry_path].append(ref_key)
+                        print("del miss: " + ref_key.find("name").text)
+
+                else:
+                    self.reg_deleted_keys_missing[registry_path].append(ref_key)
+                    print("del miss: " + ref_key.find("name").text)
+
+
+
+        # Comparaison pour trouver les clé de registres supprimées en plus dans l'extrait analysé
+        for registry_path in sample_deleted_path.keys():
+            self.reg_deleted_keys_new[registry_path] = []
+            
+            for sample_key in sample_deleted_keys[registry_path]:                
+                present = False
+
+                if registry_path in ref_deleted_keys:
+                    for ref_key in ref_deleted_keys[registry_path]:
+
+                        if (ref_key.find("key_path").text == sample_key.find("key_path").text and ref_key.find("name").text == sample_key.find("name").text and ref_key.find("type").text == sample_key.find("type").text):
+                            present = True
+
+                    if present == False:
+                        self.reg_deleted_keys_new[registry_path].append(sample_key)
+                        print("del new: " + sample_key.find("name").text)
+                else:
+                    self.reg_deleted_keys_new[registry_path].append(sample_key)                    
+                    print("del new: " + sample_key.find("name").text)
+
+        
+
+                    
+                
+                        
+
+                
+        
+            
+               
+        

@@ -1,0 +1,58 @@
+#!/usr/local/bin/python3.5
+
+
+#%System32%\winevt\Logs
+
+from lxml import etree
+
+
+class LogParser:
+
+    lastEvent = None
+    idEvent = None
+    timeEvent = None
+    
+    tree = None
+
+    def __init__(self, file_path):
+        self.path = file_path
+        self.tree = None
+        print(file_path)
+
+    def getLastEvent(self):
+
+        self.lastEvent = None
+        print(len(self.tree.xpath("/events/event")))
+
+
+        ##Problème trouvé: vient du xmlns dans la balise <Event, voir avec sed
+     
+        #print(self.tree.xpath("/Event")[0].tag+" -> ")
+        #if self.tree.xpath("/Event") is not None and self.tree.xpath("/Events") != []:
+            #self.lastEvent = self.tree.xpath("/Events")[-1]
+
+        return self.lastEvent
+
+    def getEventInfo(self, event):
+
+        if event is not None:
+            print("ok!")
+            
+            for idNumber in event.xpath("/EventID"):
+                idEvent = idNumber.text
+            #print("idevent: "+idEvent)
+
+            for date in event.xpath("/TimeCreated"):
+                timeEvent = idNumber.get("SystemTime")
+            #print("time: "+timeEvent)
+
+    def determineLastEvent(self):       
+        self.tree = etree.parse(self.path)
+        self.getEventInfo(self.getLastEvent())
+
+
+
+    
+            
+        
+

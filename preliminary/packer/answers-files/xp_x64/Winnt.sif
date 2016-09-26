@@ -1,0 +1,43 @@
+;SetupMgrTag
+
+[Data]
+    AutoPartition=1
+    MsDosInitiated="0"
+    UnattendedInstall="Yes"
+
+[Unattended]
+    UnattendMode=FullUnattended
+    OemSkipEula=Yes
+    OemPreinstall=No
+    TargetPath=\WINDOWS
+    Filesystem=ConvertNTFS
+    ExtendOemPartition=1
+    Hibernation=No
+    AutoActivate=No
+    DisableDynamicUpdates=Yes
+    UnattendSwitch=Yes
+
+[GuiUnattended]
+    AdminPassword="vagrant"
+    EncryptedAdminPassword=NO
+    AutoLogon=Yes
+    AutoLogonCount=999
+    OEMSkipRegional=1
+    OemSkipWelcome=1
+    TimeZone=105
+
+[UserData]
+    ProductID=HVH2M-B6DH7-87QJH-Y8F3M-3WQGM
+    FullName="vagrant"
+    OrgName="Company"
+    ComputerName=vagrant-xp
+
+[TapiLocation]
+   CountryCode=33
+
+[Identification]
+    JoinWorkgroup=WORKGROUP
+
+[Networking]
+    InstallDefaultComponents=Yes
+

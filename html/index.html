@@ -1,0 +1,160 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>AuditTool - Continious Integration</title>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<meta name="description" content="" />
+		<meta name="keywords" content="" />
+		<script src="js/jquery.min.js"></script>
+		<script src="js/jquery.dropotron.min.js"></script>
+		<script src="js/skel.min.js"></script>
+		<script src="js/skel-layers.min.js"></script>
+		<script src="js/init.js"></script>
+		<noscript>
+			<link rel="stylesheet" href="css/skel.css" />
+			<link rel="stylesheet" href="css/style.css" />
+		</noscript>
+	</head>
+	<body class="homepage">
+
+		<!-- Header Wrapper -->
+			<div class="wrapper style1">
+				<!-- Banner -->
+				<div id="banner">
+					<section class="container">
+						<h2>AuditTool Testing Plateform</h2>
+						<span>By Antoine Martin</br>martin.antoine52@gmail.com</br>|</br>|</br>|</br>|</br>|</br>|</br>|</br> </span>
+					</section>
+				</div>
+
+			</div>
+		
+		<!-- Section One -->
+			<div class="wrapper style2">
+				<section class="container">
+							<header class="major">
+								<h2>Projet de création d'une plateforme de tests pour l'outil "AuditTool"</h2>
+								<span class="byline"> Cette plate-forme permet le test d'execution du logiciel "Audit Tool" sur l'ensemble des éditions Windows, la récupération de résultats et l'analyse automatique de ceux-ci en observant les différents changements intervenants au niveau du système de fichier, des logs sytèmes et des registres.</span>
+							</header>
+					
+				</section>
+			</div>
+
+		<!-- Section Two -->
+			<div class="wrapper style3">
+				<section class="container">
+					<header class="major">
+						<h2>Lancer une analyse</h2>
+					</header>
+					<p>Vous pouvez lancer une analyse en appuyant sur le bouton ci-dessous. Nous vous rappelons l'odre d'utilisation "classique" de la plate-forme:</p>
+					<p>I - Installation des VMs (si cela n'a jamais été fais auparavant)</p>
+					<p>II - Changer l'exécutable à tester</p>
+					<p>IIII - Lancement de l'analyse</p>
+					<p>IV - Les résultats s'affichent automatiquement lors de la fin de l'analyse </p>
+
+					<p>/!\ ATTENTION /!\ -  En fonction du nombre de VMs sur lesquels est testé l'exécutable, le temps d'exécution d'Audit Tool et le temps d'analyse des résultats, l'analyse peut prendre plusieurs heures voir plusieurs jours. </p>
+					
+					<a href="/analysis.php" class="button alt">Lancer une analyse</a>
+				</section>
+			</div>
+
+		<!-- Section Three -->
+			<div class="wrapper style4">
+				<section class="container">
+					<header class="major">
+						<h2>Installation</h2>
+						<span class="byline">Lancer l'installation de l'ensemble des machines virtuelles </br> (1 VM = 1 versions/architecture/édition de windows)</br></span>
+						<a href="install_vm.php" class="button alt">Installer les VMs</a>
+					</header>
+					<div class="row flush">
+						<div class="4u">
+							<ul class="special-icons">
+								<li>
+									<span class="fa fa-cogs"></span>
+									<h3>Séléctionner les VMs</h3>
+									<p>Si vous ne voulez pas installer l'ensemble des VMs, vous pouvez séléctionner les VMs selon votre volontées. Pour cela, commenter/décommenter (avec le caractère '#') les entitées voulues dans le fichier /preliminary/packer/bdd.csv</p>
+								</li>
+								<li>
+									<span class="fa fa-wrench"></span>
+									<h3>Attention aux répétitions</h3>
+									<p>Une VM ne s'installera que si aucune autre VM portant le même nom n'est déjà installé. Pensez donc à supprimer les VMs que vous voulez réinstaller par la suite directement depuis le client d'administration du serveur VMware ESXi.</p>
+								</li>
+							</ul>
+						</div>
+						<div class="4u">
+							<ul class="special-icons">
+								<li>
+									<span class="fa fa-cogs"></span>
+									<h3>Ajouter une nouvelle VM</h3>
+									<p>Il est possible d'ajouter une nouvelle VM à installer depuis le fichier /preliminary/packer/bdd.csv. Pensez cependant à respecter la mise en forme de la ligne de configuration dans ce fichier.</p>
+								</li>
+								<li>
+									<span class="fa fa-wrench"></span>
+									<h3>Convention de notation des VMs</h3>
+									<p>Dans le fichier /preliminary/packer/bdd.csv, les VMs doivent respecter une convention stricte de notation. Une ligne se présente ainsi: "Edition=nom de la VM;path de l'image iso de windows;path de l'answers file pour configuration automatique;path du fichier de configuration de packer". Référencez-vous aux exemples déjà présent.</p>
+								</li>
+							</ul>
+						</div>
+						<div class="4u">
+							<ul class="special-icons">
+								<li>
+									<span class="fa fa-leaf"></span>
+									<h3>Conseil</h3>
+									<p>Il est conseillé de vérifier le bon fonctionnement des VMs avant de lancer une analyse. Pour cela, vérifier le fonctionnement de la VM, l'exécution des VMware Guest Tools et le présence du snapshot "initial".</p>
+									<p>Le temps d'installation des VMs peut être très long, comptez plusieurs jours pour la liste entière</p>
+									<p>En cas de problème lors de la phase d'installation, par mesure de sécurité, le script s'arrêtera automatiquement pour ne pas endommager les autres VMs. Vérifier donc la dernière VM installée pour régler le problème.</p>
+									<p>En cas de problème avec une VM lors de la phase d'analyse, la VM sera ignorée par le script d'analyse. Si le problème perdure, essayé de ré-installer uniquement cette VM en commentnant toutes les autres dans le fichier /preliminary/packer/bdd.csv.</p>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</section>
+			</div>
+		
+	
+			<div class="wrapper style3">
+				<section id="team" class="container">
+					<header class="major">
+						<h2>Changer l'exécutable à analyser</h2>
+						<span class="byline">Seul les exécutables nommés "audit_tool.exe" et "audit_tool_x64.exe" et présents dans le dossier /platform/upload_files/ sont testés durant la phase d'analyse. Il vous faut donc modifier ces fichiers si vous voulez tester une nouvelle version d'audit tool. Pour cela, il existe plusieurs façon:</span>
+					</header>
+					<div>
+						<div>
+							<h3>Via ce site</h3>
+							<p>Vous pouvez changer l'exécutable à tester en appuyant sur le bouton ci-dessous.</p>
+							<form method="post" action="upload_exec.php" enctype="multipart/form-data">
+							  <input type="file" name="new_exec" value="" class="button alt"/>
+							  <input type="submit" value="Pousser un exécutable" />
+							</form>
+						</div>
+						<div>
+							<h3></br>Via SSH</h3>
+							<p>Vous pouvez changer l'exécutable à tester en utilisant SSH via la commande "scp /path/to/new/executable/audit_tool[_x64].exe server-admin@10.200.16.240:/var/www/AuditTool-Testing-Platform/platform/upload_files/" </p>
+						</div>
+						<div>
+							<h3>Via Intégration Continue (TODO)</h3>
+							<p>Après compilation, les exécutables sont poussés automatiquement vers le serveur pour être testé. -> TODO</p>
+						</div>
+						<div>
+							<h3>/!\ Avertissement /!\</h3>
+							<p>Pensez à bien renommer les exécutables sous la forme "audit_tool.exe" pour la version 32 bits et "audit_tool_x64.exe" pour la version 64 bits. Ils devront donc remplacer les exécutables déjà présents dans le dossier /platform/upload_files/. </p>
+						</div>
+					</div>
+				</section>
+			</div>
+
+	<!-- Footer -->
+		<div id="footer">
+			<section class="container">
+				<header class="major">
+					<h2>Documents supplémentaires</br></h2>
+					<span class="byline">Lien GitLab de téléchargement du projet: </span>
+					<span class="byline">Lien vers le rapport de stage/ décription technique du projet: </span>
+					<span class="byline">Contact en cas de problème: martin.antoine52@gmail.com </span>
+					<span class="byline">by Antoine Martin | Bureau Audit et Inspection </span>
+				</header>
+			</section>
+	
+		</div>
+	</body>
+</html>

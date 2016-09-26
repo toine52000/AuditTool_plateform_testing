@@ -1,0 +1,9 @@
+user = "root"
+passwd = "CYKUG6dtQ0uX"
+ipHost = "10.200.16.239"
+portHost = "443"
+datastore = "~/vmfs/volumes/54548419-eaa31148-cc3b-288023a7c830/"
+
+nombreDeVMParVague = 23
+
+
